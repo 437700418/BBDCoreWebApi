@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BBDCoreWebApi</name>
+    </assembly>
+    <members>
+        <member name="M:BBDCoreWebApi.Controllers.BlogController.GetBlog(System.Int32)">
+            <summary>
+            获取博客信息
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BBDCoreWebApi.Controllers.BlogController.Post(BBDCore.Model.Love)">
+            <summary>
+            博客提交接口
+            </summary>
+            <param name="love">model实体类参数</param>
+        </member>
+        <member name="M:BBDCoreWebApi.Controllers.WeatherForecastController.Get">
+            <summary>
+            第一个接口
+            </summary>
+            <returns>天气预报数据列表</returns>
+        </member>
+        <member name="T:BBDCoreWebApi.WeatherForecast">
+            <summary>
+            天气预报对象
+            </summary>
+        </member>
+        <member name="P:BBDCoreWebApi.WeatherForecast.Date">
+            <summary>
+            日期
+            </summary>
+        </member>
+        <member name="P:BBDCoreWebApi.WeatherForecast.TemperatureC">
+            <summary>
+            摄氏温度
+            </summary>
+        </member>
+        <member name="P:BBDCoreWebApi.WeatherForecast.TemperatureF">
+            <summary>
+            华氏温度
+            </summary>
+        </member>
+        <member name="P:BBDCoreWebApi.WeatherForecast.Summary">
+            <summary>
+            描述
+            </summary>
+        </member>
+    </members>
+</doc>
