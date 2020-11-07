@@ -23,6 +23,10 @@ namespace BBDCoreWebApi.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// 第一个接口
+        /// </summary>
+        /// <returns>天气预报数据列表</returns>
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

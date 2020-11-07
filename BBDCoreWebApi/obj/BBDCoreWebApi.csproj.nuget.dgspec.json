@@ -4,14 +4,14 @@
     "E:\\git\\BBDCoreWebApi\\BBDCoreWebApi\\BBDCoreWebApi.csproj": {}
   },
   "projects": {
-    "E:\\git\\BBDCoreWebApi\\BBDCoreWebApi\\BBDCoreWebApi.csproj": {
+    "E:\\git\\BBDCoreWebApi\\BBDCore.Model\\BBDCore.Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\git\\BBDCoreWebApi\\BBDCoreWebApi\\BBDCoreWebApi.csproj",
-        "projectName": "BBDCoreWebApi",
-        "projectPath": "E:\\git\\BBDCoreWebApi\\BBDCoreWebApi\\BBDCoreWebApi.csproj",
+        "projectUniqueName": "E:\\git\\BBDCoreWebApi\\BBDCore.Model\\BBDCore.Model.csproj",
+        "projectName": "BBDCore.Model",
+        "projectPath": "E:\\git\\BBDCoreWebApi\\BBDCore.Model\\BBDCore.Model.csproj",
         "packagesPath": "C:\\Users\\O_O\\.nuget\\packages\\",
-        "outputPath": "E:\\git\\BBDCoreWebApi\\BBDCoreWebApi\\obj\\",
+        "outputPath": "E:\\git\\BBDCoreWebApi\\BBDCore.Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -42,6 +42,81 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\git\\BBDCoreWebApi\\BBDCoreWebApi\\BBDCoreWebApi.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\git\\BBDCoreWebApi\\BBDCoreWebApi\\BBDCoreWebApi.csproj",
+        "projectName": "BBDCoreWebApi",
+        "projectPath": "E:\\git\\BBDCoreWebApi\\BBDCoreWebApi\\BBDCoreWebApi.csproj",
+        "packagesPath": "C:\\Users\\O_O\\.nuget\\packages\\",
+        "outputPath": "E:\\git\\BBDCoreWebApi\\BBDCoreWebApi\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\O_O\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "http://192.168.1.2:8888/nuget": {},
+          "http://225iz66742.iok.la:8888/nuget": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "E:\\git\\BBDCoreWebApi\\BBDCore.Model\\BBDCore.Model.csproj": {
+                "projectPath": "E:\\git\\BBDCoreWebApi\\BBDCore.Model\\BBDCore.Model.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.DotNet.PlatformAbstractions": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[5.6.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
