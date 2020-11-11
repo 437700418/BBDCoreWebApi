@@ -23,6 +23,31 @@
             </summary>
             <returns>天气预报数据列表</returns>
         </member>
+        <member name="T:BBDCoreWebApi.Extensions.CustomApiVersion">
+            <summary>
+            自定义版本
+            </summary>
+        </member>
+        <member name="T:BBDCoreWebApi.Extensions.CustomApiVersion.ApiVersions">
+            <summary>
+            Api接口版本 自定义
+            </summary>
+        </member>
+        <member name="F:BBDCoreWebApi.Extensions.CustomApiVersion.ApiVersions.V1">
+            <summary>
+            V1 版本
+            </summary>
+        </member>
+        <member name="F:BBDCoreWebApi.Extensions.CustomApiVersion.ApiVersions.V2">
+            <summary>
+            V2 版本
+            </summary>
+        </member>
+        <member name="T:BBDCoreWebApi.Mildd.SwaggerMildd">
+            <summary>
+            Swagger中间件
+            </summary>
+        </member>
         <member name="T:BBDCoreWebApi.WeatherForecast">
             <summary>
             天气预报对象

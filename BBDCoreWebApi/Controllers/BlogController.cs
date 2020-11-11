@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BBDCore.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BBDCoreWebApi.Controllers
@@ -16,7 +17,7 @@ namespace BBDCoreWebApi.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet,Authorize]
         public IActionResult GetBlog(int Id)
         {
             return new JsonResult($"第{Id}篇博客");
