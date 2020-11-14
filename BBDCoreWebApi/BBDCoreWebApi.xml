@@ -4,24 +4,30 @@
         <name>BBDCoreWebApi</name>
     </assembly>
     <members>
-        <member name="M:BBDCoreWebApi.Controllers.BlogController.GetBlog(System.Int32)">
+        <member name="M:BBDCoreWebApi.Controllers.v1.BlogController.GetBlog(System.Int32)">
             <summary>
             获取博客信息
             </summary>
             <param name="Id"></param>
             <returns></returns>
         </member>
-        <member name="M:BBDCoreWebApi.Controllers.BlogController.Post(BBDCore.Model.Love)">
+        <member name="M:BBDCoreWebApi.Controllers.v1.BlogController.Post(BBDCore.Model.Love)">
             <summary>
             博客提交接口
             </summary>
             <param name="love">model实体类参数</param>
         </member>
-        <member name="M:BBDCoreWebApi.Controllers.WeatherForecastController.Get">
+        <member name="M:BBDCoreWebApi.Controllers.v1.WeatherForecastController.Get">
             <summary>
             第一个接口
             </summary>
             <returns>天气预报数据列表</returns>
+        </member>
+        <member name="M:BBDCoreWebApi.Controllers.v2.BlogController.Blogtest">
+            <summary>
+            获取博客测试信息 v2版本
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:BBDCoreWebApi.Extensions.CustomApiVersion">
             <summary>
@@ -33,12 +39,12 @@
             Api接口版本 自定义
             </summary>
         </member>
-        <member name="F:BBDCoreWebApi.Extensions.CustomApiVersion.ApiVersions.V1">
+        <member name="F:BBDCoreWebApi.Extensions.CustomApiVersion.ApiVersions.v1">
             <summary>
             V1 版本
             </summary>
         </member>
-        <member name="F:BBDCoreWebApi.Extensions.CustomApiVersion.ApiVersions.V2">
+        <member name="F:BBDCoreWebApi.Extensions.CustomApiVersion.ApiVersions.v2">
             <summary>
             V2 版本
             </summary>
@@ -47,6 +53,29 @@
             <summary>
             Swagger中间件
             </summary>
+        </member>
+        <member name="T:BBDCoreWebApi.SwaggerHelper.CustomRouteAttribute">
+            <summary>
+            自定义路由 /api/{version}/[controler]/[action]
+            </summary>
+        </member>
+        <member name="P:BBDCoreWebApi.SwaggerHelper.CustomRouteAttribute.GroupName">
+            <summary>
+            分组名称,是来实现接口 IApiDescriptionGroupNameProvider
+            </summary>
+        </member>
+        <member name="M:BBDCoreWebApi.SwaggerHelper.CustomRouteAttribute.#ctor(System.String)">
+            <summary>
+            自定义路由构造函数，继承基类路由
+            </summary>
+            <param name="actionName"></param>
+        </member>
+        <member name="M:BBDCoreWebApi.SwaggerHelper.CustomRouteAttribute.#ctor(BBDCoreWebApi.Extensions.CustomApiVersion.ApiVersions,System.String)">
+            <summary>
+            自定义版本+路由构造函数，继承基类路由
+            </summary>
+            <param name="actionName"></param>
+            <param name="version"></param>
         </member>
         <member name="T:BBDCoreWebApi.WeatherForecast">
             <summary>

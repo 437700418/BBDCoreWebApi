@@ -93,11 +93,11 @@ namespace BBDCoreWebApi.Extensions
             /// <summary>
             /// V1 版本
             /// </summary>
-            V1 = 1,
+            v1 = 1,
             /// <summary>
             /// V2 版本
             /// </summary>
-            V2 = 2,
+            v2 = 2,
         }
     }
 }
