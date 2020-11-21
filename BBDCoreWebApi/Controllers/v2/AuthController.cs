@@ -29,6 +29,7 @@ namespace BBDCoreWebApi.Controllers.v2
         }
 
         [Authorize]
+        [HttpGet]
         public object GetTokenInfo()
         {
             string jwtToken = JwtHelper.IssueJwt(new TokenModelJwt()

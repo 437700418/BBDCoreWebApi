@@ -51,6 +51,10 @@ namespace BBDCoreWebApi.Extensions
 
                     var xmlModelPath = Path.Combine(basePath, "BBDCore.Model.xml");//这个就是Model层的xml文件名
                     c.IncludeXmlComments(xmlModelPath);
+
+                    var xmlCommonPath = Path.Combine(basePath, "BBDCore.Common.xml");//这个就是Model层的xml文件名
+                    c.IncludeXmlComments(xmlCommonPath);
+
                 }
                 catch (Exception ex)
                 {
