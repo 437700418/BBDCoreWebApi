@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using BBDCore.Common.Helper;
 using BBDCoreWebApi.Extensions;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace BBDCoreWebApi
@@ -56,13 +58,39 @@ namespace BBDCoreWebApi
             //    c.IncludeXmlComments(xmlModelPath);
 
             //});
-            services.AddAuthentication("Bearer").AddJwtBearer();
+            string iss = Appsettings.app(new string[] { "Audience", "Issuer" });
+            string aud = Appsettings.app(new string[] { "Audience", "Audience" });
+            string secret = AppSecretConfig.Audience_Secret_String;
+            //秘钥 (SymmetricSecurityKey 对安全性的要求，密钥的长度太短会报出异常)
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));//密钥
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);//加密方式
+
+            services.AddSingleton<HttpContextAccessor, HttpContextAccessor>();
+            TokenValidationParameters tokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = key,
+                ValidateIssuer = true,
+                ValidIssuer = iss,
+                ValidateAudience = true,
+                ValidAudience = aud,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.FromSeconds(30),
+                RequireExpirationTime=true,
+            };
+            services.AddAuthentication("Bearer").AddJwtBearer((a) => 
+            {
+                a.TokenValidationParameters = tokenValidationParameters;
+            });
             services.AddSwaggerSetup();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseAuthentication();
+
             app.Use(async (context, next) =>
             {
 
@@ -105,10 +133,9 @@ namespace BBDCoreWebApi
             //    c.RoutePrefix = "";
             //});
 
-            app.UseSwaggerMildd();
+            //app.UseSwaggerMildd();
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
