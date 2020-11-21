@@ -39,25 +39,7 @@ namespace BBDCoreWebApi
             services.AddSingleton(new Appsettings(Configuration));
             services.AddControllers();
             var basePath = ApplicationEnvironment.ApplicationBasePath;
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("V1", new Microsoft.OpenApi.Models.OpenApiInfo()
-            //    {
-            //        // {ApiName} 定义成全局变量，方便修改
-            //        Version = "V1",
-            //        Title = $"{ApiName} 接口文档——Netcore 3.1.4",
-            //        Description = $"{ApiName} HTTP API V1",
-            //        Contact = new OpenApiContact { Name = ApiName, Email = "437700418@qq.com", Url = new Uri("https://www.baidu.com") },
-            //        License = new OpenApiLicense { Name = ApiName, Url = new Uri("https://www.baidu.com") }
-            //    });
-            //    //就是这里！！！！！！！！！
-            //    var xmlPath = Path.Combine(basePath, "BBDCoreWebApi.xml");//这个就是刚刚配置的xml文件名
-            //    c.IncludeXmlComments(xmlPath, true);//默认的第二个参数是false，这个是controller的注释，记得修改
-
-            //    var xmlModelPath = Path.Combine(basePath, "BBDCore.Model.xml");//这个就是Model层的xml文件名
-            //    c.IncludeXmlComments(xmlModelPath);
-
-            //});
+          
             string iss = Appsettings.app(new string[] { "Audience", "Issuer" });
             string aud = Appsettings.app(new string[] { "Audience", "Audience" });
             string secret = AppSecretConfig.Audience_Secret_String;
@@ -68,13 +50,13 @@ namespace BBDCoreWebApi
             services.AddSingleton<HttpContextAccessor, HttpContextAccessor>();
             TokenValidationParameters tokenValidationParameters = new TokenValidationParameters()
             {
-                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,//是否验证SecurityKey
+                ValidateIssuerSigningKey = true,//是否验证Issuer、
+                ValidateAudience = true,//是否验证Audience
+                ValidateLifetime = true,//是否验证失效时间
                 IssuerSigningKey = key,
-                ValidateIssuer = true,
                 ValidIssuer = iss,
-                ValidateAudience = true,
                 ValidAudience = aud,
-                ValidateLifetime = true,
                 ClockSkew = TimeSpan.FromSeconds(30),
                 RequireExpirationTime=true,
             };
@@ -123,19 +105,20 @@ namespace BBDCoreWebApi
             }
 
             app.UseHttpsRedirection();
-            //app.UseSwagger();
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint($"/swagger/V1/swagger.json", $"{ApiName} V1");
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/V1/swagger.json", $"{ApiName} V1");
 
-            //    //路径配置，设置为空，表示直接在根域名（localhost:8001）访问该文件,
-            //    //注意localhost:8001/swagger是访问不到的，去launchSettings.json把launchUrl去掉，如果你想换一个路径，直接写名字即可，比如直接写c.RoutePrefix = "doc";
-            //    c.RoutePrefix = "";
-            //});
+                //路径配置，设置为空，表示直接在根域名（localhost:8001）访问该文件,
+                //注意localhost:8001/swagger是访问不到的，去launchSettings.json把launchUrl去掉，如果你想换一个路径，直接写名字即可，比如直接写c.RoutePrefix = "doc";
+                c.RoutePrefix = "";
+            });
 
-            //app.UseSwaggerMildd();
+            app.UseSwaggerMildd();
             app.UseRouting();
 
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

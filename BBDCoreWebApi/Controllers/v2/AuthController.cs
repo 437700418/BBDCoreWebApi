@@ -27,6 +27,8 @@ namespace BBDCoreWebApi.Controllers.v2
             });
             return Ok(jwtToken);
         }
+
+        [Authorize]
         public object GetTokenInfo()
         {
             string jwtToken = JwtHelper.IssueJwt(new TokenModelJwt()
