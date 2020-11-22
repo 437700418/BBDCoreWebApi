@@ -40,27 +40,7 @@ namespace BBDCoreWebApi
             services.AddSingleton(new Appsettings(Configuration));
             services.AddControllers();
 
-            var basePath = ApplicationEnvironment.ApplicationBasePath;
-            string iss = Appsettings.app(new string[] { "Audience", "Issuer" });
-            string aud = Appsettings.app(new string[] { "Audience", "Audience" });
-            string secret = AppSecretConfig.Audience_Secret_String;
-            //秘钥 (SymmetricSecurityKey 对安全性的要求，密钥的长度太短会报出异常)
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));//密钥
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);//加密方式
-
             services.AddSingleton<HttpContextAccessor, HttpContextAccessor>();
-            TokenValidationParameters tokenValidationParameters = new TokenValidationParameters()
-            {
-                ValidateIssuer = true,//是否验证SecurityKey
-                ValidateIssuerSigningKey = true,//是否验证Issuer、
-                ValidateAudience = true,//是否验证Audience
-                ValidateLifetime = true,//是否验证失效时间
-                IssuerSigningKey = key,
-                ValidIssuer = iss,
-                ValidAudience = aud,
-                ClockSkew = TimeSpan.FromSeconds(30),
-                RequireExpirationTime = true,
-            };
 
 
             // 1【授权】、这个和上边的异曲同工，好处就是不用在controller中，写多个 roles 。
@@ -75,22 +55,8 @@ namespace BBDCoreWebApi
                 options.AddPolicy("user", policy => policy.RequireRole(Role.user.ToString()));
             });
 
-            services.AddAuthentication("Bearer").AddJwtBearer((a) =>
-            {
-                a.TokenValidationParameters = tokenValidationParameters;
-                a.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        // 如果过期，则把<是否过期>添加到，返回头信息中
-                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                        {
-                            context.Response.Headers.Add("Token-Expired", "true");
-                        }
-                        return Task.CompletedTask;
-                    }
-                };
-            });
+            services.AddAuthenticationSetup();
+
             services.AddSwaggerSetup();
         }
 
