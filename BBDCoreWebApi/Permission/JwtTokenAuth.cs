@@ -66,6 +66,8 @@ namespace Blog.Core.AuthHelper
 
                 return _next(httpContext);
             }
+            //但是！请注意，这个时候我们输入了 token，我们就会在 httpcontext 上下文中，添加上我们自己自定义的身份验证方案！！！
+            //这就是没有继续报错的根本原因
             var tokenHeader = httpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
             try
