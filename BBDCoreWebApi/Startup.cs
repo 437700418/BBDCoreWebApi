@@ -37,25 +37,6 @@ namespace BBDCoreWebApi
             services.AddSingleton(new Appsettings(Configuration));
             services.AddControllers();
             var basePath = ApplicationEnvironment.ApplicationBasePath;
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("V1", new Microsoft.OpenApi.Models.OpenApiInfo()
-            //    {
-            //        // {ApiName} 定义成全局变量，方便修改
-            //        Version = "V1",
-            //        Title = $"{ApiName} 接口文档——Netcore 3.1.4",
-            //        Description = $"{ApiName} HTTP API V1",
-            //        Contact = new OpenApiContact { Name = ApiName, Email = "437700418@qq.com", Url = new Uri("https://www.baidu.com") },
-            //        License = new OpenApiLicense { Name = ApiName, Url = new Uri("https://www.baidu.com") }
-            //    });
-            //    //就是这里！！！！！！！！！
-            //    var xmlPath = Path.Combine(basePath, "BBDCoreWebApi.xml");//这个就是刚刚配置的xml文件名
-            //    c.IncludeXmlComments(xmlPath, true);//默认的第二个参数是false，这个是controller的注释，记得修改
-
-            //    var xmlModelPath = Path.Combine(basePath, "BBDCore.Model.xml");//这个就是Model层的xml文件名
-            //    c.IncludeXmlComments(xmlModelPath);
-
-            //});
             services.AddAuthentication("Bearer").AddJwtBearer();
             services.AddSwaggerSetup();
         }
