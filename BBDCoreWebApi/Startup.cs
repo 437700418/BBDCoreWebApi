@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using BBDCore.Common.Helper;
 using BBDCoreWebApi.Extensions;
@@ -18,7 +16,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace BBDCoreWebApi
@@ -40,44 +37,33 @@ namespace BBDCoreWebApi
             services.AddSingleton(new Appsettings(Configuration));
             services.AddControllers();
             var basePath = ApplicationEnvironment.ApplicationBasePath;
-          
-            string iss = Appsettings.app(new string[] { "Audience", "Issuer" });
-            string aud = Appsettings.app(new string[] { "Audience", "Audience" });
-            string secret = AppSecretConfig.Audience_Secret_String;
-            //秘钥 (SymmetricSecurityKey 对安全性的要求，密钥的长度太短会报出异常)
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));//密钥
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);//加密方式
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("V1", new Microsoft.OpenApi.Models.OpenApiInfo()
+            //    {
+            //        // {ApiName} 定义成全局变量，方便修改
+            //        Version = "V1",
+            //        Title = $"{ApiName} 接口文档——Netcore 3.1.4",
+            //        Description = $"{ApiName} HTTP API V1",
+            //        Contact = new OpenApiContact { Name = ApiName, Email = "437700418@qq.com", Url = new Uri("https://www.baidu.com") },
+            //        License = new OpenApiLicense { Name = ApiName, Url = new Uri("https://www.baidu.com") }
+            //    });
+            //    //就是这里！！！！！！！！！
+            //    var xmlPath = Path.Combine(basePath, "BBDCoreWebApi.xml");//这个就是刚刚配置的xml文件名
+            //    c.IncludeXmlComments(xmlPath, true);//默认的第二个参数是false，这个是controller的注释，记得修改
 
-            //清除配置映射
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            //    var xmlModelPath = Path.Combine(basePath, "BBDCore.Model.xml");//这个就是Model层的xml文件名
+            //    c.IncludeXmlComments(xmlModelPath);
 
-            services.AddSingleton<HttpContextAccessor, HttpContextAccessor>();
-            TokenValidationParameters tokenValidationParameters = new TokenValidationParameters()
-            {
-                ValidateIssuer = true,//是否验证SecurityKey
-                ValidateIssuerSigningKey = true,//是否验证Issuer、
-                ValidateAudience = true,//是否验证Audience
-                ValidateLifetime = true,//是否验证失效时间
-                IssuerSigningKey = key,
-                ValidIssuer = iss,
-                ValidAudience = aud,
-                ClockSkew = TimeSpan.FromSeconds(30),
-                RequireExpirationTime=true,
-            };
-            //注册JWt服务
-            services.AddAuthentication("Bearer").AddJwtBearer((a) => 
-            {
-                a.TokenValidationParameters = tokenValidationParameters;
-            });
+            //});
+            services.AddAuthentication("Bearer").AddJwtBearer();
+            services.AddAuthentication("Bearer").AddJwtBearer();
             services.AddSwaggerSetup();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
-            app.UseAuthentication();
-
             app.Use(async (context, next) =>
             {
 
@@ -113,7 +99,7 @@ namespace BBDCoreWebApi
 
             app.UseSwaggerMildd();
             app.UseRouting();
-            //开启中间件
+
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
