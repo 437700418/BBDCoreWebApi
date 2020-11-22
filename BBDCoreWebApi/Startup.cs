@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using BBDCore.Common.Helper;
 using BBDCoreWebApi.Extensions;
 using BBDCoreWebApi.Mildd;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace BBDCoreWebApi
@@ -36,28 +39,58 @@ namespace BBDCoreWebApi
         {
             services.AddSingleton(new Appsettings(Configuration));
             services.AddControllers();
+
             var basePath = ApplicationEnvironment.ApplicationBasePath;
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("V1", new Microsoft.OpenApi.Models.OpenApiInfo()
-            //    {
-            //        // {ApiName} 定义成全局变量，方便修改
-            //        Version = "V1",
-            //        Title = $"{ApiName} 接口文档——Netcore 3.1.4",
-            //        Description = $"{ApiName} HTTP API V1",
-            //        Contact = new OpenApiContact { Name = ApiName, Email = "437700418@qq.com", Url = new Uri("https://www.baidu.com") },
-            //        License = new OpenApiLicense { Name = ApiName, Url = new Uri("https://www.baidu.com") }
-            //    });
-            //    //就是这里！！！！！！！！！
-            //    var xmlPath = Path.Combine(basePath, "BBDCoreWebApi.xml");//这个就是刚刚配置的xml文件名
-            //    c.IncludeXmlComments(xmlPath, true);//默认的第二个参数是false，这个是controller的注释，记得修改
+            string iss = Appsettings.app(new string[] { "Audience", "Issuer" });
+            string aud = Appsettings.app(new string[] { "Audience", "Audience" });
+            string secret = AppSecretConfig.Audience_Secret_String;
+            //秘钥 (SymmetricSecurityKey 对安全性的要求，密钥的长度太短会报出异常)
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));//密钥
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);//加密方式
 
-            //    var xmlModelPath = Path.Combine(basePath, "BBDCore.Model.xml");//这个就是Model层的xml文件名
-            //    c.IncludeXmlComments(xmlModelPath);
+            services.AddSingleton<HttpContextAccessor, HttpContextAccessor>();
+            TokenValidationParameters tokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = true,//是否验证SecurityKey
+                ValidateIssuerSigningKey = true,//是否验证Issuer、
+                ValidateAudience = true,//是否验证Audience
+                ValidateLifetime = true,//是否验证失效时间
+                IssuerSigningKey = key,
+                ValidIssuer = iss,
+                ValidAudience = aud,
+                ClockSkew = TimeSpan.FromSeconds(30),
+                RequireExpirationTime = true,
+            };
 
-            //});
-            services.AddAuthentication("Bearer").AddJwtBearer();
-            services.AddAuthentication("Bearer").AddJwtBearer();
+
+            // 1【授权】、这个和上边的异曲同工，好处就是不用在controller中，写多个 roles 。
+            // 然后这么写 [Authorize(Policy = "Admin")]
+            //配置接口授权策略
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("guest", policy => policy.RequireRole(Role.guest.ToString()).Build());
+
+                options.AddPolicy("admin", policy => policy.RequireRole(Role.manage.ToString(), Role.system.ToString()).Build());
+
+                options.AddPolicy("user", policy => policy.RequireRole(Role.user.ToString()));
+            });
+
+            services.AddAuthentication("Bearer").AddJwtBearer((a) =>
+            {
+                a.TokenValidationParameters = tokenValidationParameters;
+                a.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        // 如果过期，则把<是否过期>添加到，返回头信息中
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
             services.AddSwaggerSetup();
         }
 
@@ -66,29 +99,23 @@ namespace BBDCoreWebApi
         {
             app.Use(async (context, next) =>
             {
-
                 Console.WriteLine("1 start");
                 await next();
                 Console.WriteLine("1 end");
             });
 
-
             app.Use(async (context, next) =>
             {
-
                 Console.WriteLine("2 start");
                 await next();
                 Console.WriteLine("2 end");
             });
 
-
-
             app.Use(async (context, next) =>
             {
-
                 Console.WriteLine("3 start");
                 await next();
-                Console.WriteLine("4 end");
+                Console.WriteLine("3 end");
             });
             if (env.IsDevelopment())
             {
@@ -99,14 +126,12 @@ namespace BBDCoreWebApi
 
             app.UseSwaggerMildd();
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
-
         }
     }
 }

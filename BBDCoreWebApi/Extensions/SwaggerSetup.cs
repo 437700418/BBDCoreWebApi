@@ -42,7 +42,6 @@ namespace BBDCoreWebApi.Extensions
                     c.OrderActionsBy(o => o.RelativePath);
                 });
 
-
                 try
                 {
                     //就是这里！！！！！！！！！
@@ -60,14 +59,12 @@ namespace BBDCoreWebApi.Extensions
                 {
                     //log.Error("Blog.Core.xml和Blog.Core.Model.xml 丢失，请检查并拷贝。\n" + ex.Message);
                 }
-
                 //// 开启加权小锁
                 c.OperationFilter<AddResponseHeadersFilter>();
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
 
                 // 在header中添加token，传递到后台
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
-
 
                 // Jwt Bearer 认证，必须是 oauth2
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -77,9 +74,6 @@ namespace BBDCoreWebApi.Extensions
                     In = ParameterLocation.Header,//jwt默认存放Authorization信息的位置(请求头中)
                     Type = SecuritySchemeType.ApiKey
                 });
-
-
-
             });
         }
     }

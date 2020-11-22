@@ -16,12 +16,11 @@ namespace BBDCoreWebApi.Controllers.v2
     {
 
         [HttpGet]
-
         public object GetToken()
         {
             string jwtToken = JwtHelper.IssueJwt(new TokenModelJwt()
             {
-                Role = "manage",
+                Role = "manage,system,guest",
                 Uid = 123,
                 Work = "Work",
             });
@@ -30,20 +29,23 @@ namespace BBDCoreWebApi.Controllers.v2
 
         [Authorize]//授权
         [HttpGet]
+
         public object GetTokenInfo()
         {
-            string jwtToken = JwtHelper.IssueJwt(new TokenModelJwt()
-            {
-                Role = "manage",
-                Uid = 123,
-                Work = "Work",
-            });
-            var name = HttpContext.User.Identity.Name;
+            return new JsonResult(HttpContext.User.Identity.IsAuthenticated);
+        }
 
-            var user = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Jti);
-            var email = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Email);
+        [HttpGet, Authorize(Policy = "guest")]
+        public string ValidateGuest() {
 
-            return new JsonResult(JwtHelper.ReadToken(jwtToken));
+            return "通过guest验证";
+        }
+
+
+        [HttpGet,Authorize(Policy = "user")]
+        public string ValidateUser()
+        {
+            return "通过user验证";
         }
     }
 }

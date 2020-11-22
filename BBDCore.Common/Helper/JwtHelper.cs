@@ -76,4 +76,29 @@ namespace BBDCore.Common.Helper
         public string Work { get; set; }
 
     }
+
+    /// <summary>
+    /// 角色枚举
+    /// </summary>
+    public enum Role
+    {
+        /// <summary>
+        /// 管理员
+        /// </summary>
+        manage,
+        /// <summary>
+        /// 系统管理员
+        /// </summary>
+        system,
+
+        /// <summary>
+        /// 访客
+        /// </summary>
+        guest,
+
+        /// <summary>
+        /// 普通用户
+        /// </summary>
+        user
+    }
 }
