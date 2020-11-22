@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BBDCore.Common</name>
+    </assembly>
+    <members>
+        <member name="T:BBDCore.Common.Helper.Appsettings">
+            <summary>
+            appsettings.json操作类
+            </summary>
+        </member>
+        <member name="M:BBDCore.Common.Helper.Appsettings.app(System.String[])">
+            <summary>
+            封装要操作的字符
+            </summary>
+            <param name="sections">节点配置</param>
+            <returns></returns>
+        </member>
+        <member name="M:BBDCore.Common.Helper.Appsettings.app``1(System.String[])">
+            <summary>
+            递归获取配置信息数组
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="sections"></param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BBDCore.Common.Helper.JwtHelper.IssueJwt(BBDCore.Common.Helper.TokenModelJwt)" -->
+        <member name="T:BBDCore.Common.Helper.TokenModelJwt">
+            <summary>
+            令牌
+            </summary>
+        </member>
+        <member name="P:BBDCore.Common.Helper.TokenModelJwt.Uid">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:BBDCore.Common.Helper.TokenModelJwt.Role">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:BBDCore.Common.Helper.TokenModelJwt.Work">
+            <summary>
+            职能
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -29,6 +29,8 @@ namespace BBDCore.Common.Helper
             claims.Add(new Claim(ClaimTypes.Expiration, DateTime.Now.AddSeconds(1000).ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iss, iss));
             claims.Add(new Claim(JwtRegisteredClaimNames.Aud, aud));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Email, "437700418@qq.com"));
+
 
             // 可以将一个用户的多个角色全部赋予；
             claims.AddRange(tokenModel.Role.Split(',').Select(s => new Claim(ClaimTypes.Role, s)));

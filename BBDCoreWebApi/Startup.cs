@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -47,6 +48,9 @@ namespace BBDCoreWebApi
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));//密钥
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);//加密方式
 
+            //清除配置映射
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services.AddSingleton<HttpContextAccessor, HttpContextAccessor>();
             TokenValidationParameters tokenValidationParameters = new TokenValidationParameters()
             {
@@ -60,6 +64,7 @@ namespace BBDCoreWebApi
                 ClockSkew = TimeSpan.FromSeconds(30),
                 RequireExpirationTime=true,
             };
+            //注册JWt服务
             services.AddAuthentication("Bearer").AddJwtBearer((a) => 
             {
                 a.TokenValidationParameters = tokenValidationParameters;
@@ -108,7 +113,7 @@ namespace BBDCoreWebApi
 
             app.UseSwaggerMildd();
             app.UseRouting();
-
+            //开启中间件
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
